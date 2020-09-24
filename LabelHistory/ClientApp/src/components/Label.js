@@ -73,7 +73,7 @@ export class Label extends Component {
                                     <IconContext.Provider value={{ color: "white", className: "global-class-name" }}>
                                         <div>
                                             <BiBarcodeReader size="36px" />
-                                              Decostar Label History
+                                              Decostar Part History
                                         </div>
                                     </IconContext.Provider> 
                                 </Navbar.Brand>    
