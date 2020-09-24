@@ -1,0 +1,76 @@
+/* Provide sufficient contrast against white background */
+a {
+  color: #0366d6;
+}
+
+code {
+  color: #E01A76;
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: #1b6ec2;
+  border-color: #1861ac;
+}
+.container {
+    margin-left:5px;
+    margin-right: 5px;
+}
+#dataContainer {
+    padding-top: 60px;
+    text-align: left;
+    flex-basis: auto;
+}
+
+.data-table {
+    margin-left: 5rem;
+    /*width: 90%;*/
+}
+#NavColumn {
+    align-items: center;
+    
+    width: 350px;
+    background-color: #f7f7f7;
+    border-right: 1px solid #ececec;
+    z-index: 1000;
+    height: 100%;
+    position: fixed;
+    top: 60px;
+    left: 0;
+}
+#scrollableContent {
+    left: 350px; /* Same as the width of the sidenav */
+}
+.scrollspy {
+    padding-top: 3rem;
+
+    
+}
+.is-current {
+    font-weight: 800;
+    color: darkblue;
+}
+
+.subNav {
+    padding-left:  1.5em;
+}
+.indent {
+    padding-left: 1.5em;
+}
+
+.subHead {
+    font-weight: 400;
+    color: gray;
+}
+.hidden {
+    display: none;
+}
+.rotate30 {
+    transform: rotate(-25deg);
+    display: inline-block;
+    margin-left: 200px;
+}
+.table {
+    border-radius:25px;
+    
+}
