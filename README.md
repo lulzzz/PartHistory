@@ -1,6 +1,5 @@
 # PartHistory
- Single page app with ReactJS and ASP.NET that displays a manufactured parts full history by scanning one of its labels (paint, mold, rack, etc).
- 
+ReactJS and ASP.NET Single Page App that displays a manufactured part's full history by scanning one of its labels (paint, mold, rack, etc).
  
  ![image](https://user-images.githubusercontent.com/32852124/94826856-c13f4a80-03d5-11eb-9f39-c5b9cf4c3eac.png)
 
