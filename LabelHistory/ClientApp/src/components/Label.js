@@ -16,7 +16,7 @@ import { BiBarcodeReader } from 'react-icons/bi'
 import { Container } from 'reactstrap';
 import Scrollspy from 'react-scrollspy'
 import { IconContext } from "react-icons";
-
+import MagnaLogo from './MagnaLogo.png';
 
 
 export class Label extends Component {
@@ -69,10 +69,18 @@ export class Label extends Component {
                     <header>
                         <Navbar fixed="top" bg="dark" variant="dark">
                             <Container className="justify-content-start">
-                                <Navbar.Brand href="/labelHistory">                                                                    
+                                <Navbar.Brand href="/labelHistory">
+                                    <img
+                                        src={MagnaLogo}
+                                        width="220"
+                                        height="55"
+                                        className="d-inline-block align-top"
+                                        alt="Magna logo"
+                                    />                                                                    
                                     <IconContext.Provider value={{ color: "white", className: "global-class-name" }}>
                                         <div>
-                                            <BiBarcodeReader size="36px" />
+                                            
+                                            
                                               Decostar Part History
                                         </div>
                                     </IconContext.Provider> 
@@ -171,13 +179,12 @@ function PartInfo(props) {
         <section id="PartInfo">
             <h1
                     onClick={() => setOpen(!open)}
-                    aria-controls="example-collapse-text"
+                    aria-controls="collapsePartInfo"
                     aria-expanded={open}
             >{open ? <FcExpand /> : <FcCollapse />} Part Description {props.part.partMasterData.fullDescription ? subHead : <span className="subHead">| no data</span>}       
             </h1>
-            <Collapse in={!open}>
-                
-                <div id="example-collapse-text">
+            <Collapse in={!open}>               
+                <div id="collapsePartInfo">
                     <table className="table table-hover table-sm data-table">
                         <tbody>
                             <tr><td>Paint Label:</td><th>{props.part.paintBarcode}</th></tr>
@@ -210,12 +217,12 @@ function PartImage(props) {
         <section id="PartImage" className="indent">
             <h1
                 onClick={() => setOpen(!open)}
-                aria-controls="example-collapse-text"
+                aria-controls="collapsePartImage"
                 aria-expanded={open}
             >{open ? <FcExpand /> : <FcCollapse />} Part Image 
             </h1>
             <Collapse in={!open}>
-                <div id="example-collapse-text">                   
+                <div id="collapsePartImage">                   
                     <Image src={imgSource} width="400" height="245" />
                 </div>
             </Collapse>

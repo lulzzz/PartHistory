@@ -10,7 +10,7 @@ namespace LabelHistory.DataAccess
 {
     public class DB
     {
-        private static string DECOSQL = "Data Source=decosql;Persist Security Info=True;User ID=PartHistoryUser;Password=PartHistoryUser";
+        private static string DECOSQL = dbConnection.DECOSQL;
 
         //TODO: get pictures FROM [PaintRecords].[dbo].[ImagesStyles]
 
@@ -202,24 +202,15 @@ namespace LabelHistory.DataAccess
                         {
                             while (reader.Read())
                             {
-
                                 moldData.UniqueRefenceID = reader.GetInt64(reader.GetOrdinal("REFERENCE_ID"));
-
                                 moldData.MoldBarcode = reader.GetString(reader.GetOrdinal("SerialNumber"));
                                 moldData.PartNumber = reader.GetString(reader.GetOrdinal("PartNumber"));
-
                                 moldData.CreatedAt = reader.GetDateTime(reader.GetOrdinal("DateTime"));
-
                                 moldData.Press = reader.GetString(reader.GetOrdinal("Line"));
-
                                 moldData.StatusCode = reader.GetInt32(reader.GetOrdinal("STATUS_CODE"));
-
                                 moldData.MachineId = reader.GetString(reader.GetOrdinal("MachineID"));
-
                                 moldData.TranVersion = reader.GetGuid(reader.GetOrdinal("msrepl_tran_version"));
                                 moldData.RowGuid = reader.GetGuid(reader.GetOrdinal("rowguid"));
-
-
                             }
                         }
 

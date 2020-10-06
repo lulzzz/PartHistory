@@ -3,25 +3,19 @@ a {
   color: #0366d6;
 }
 
-code {
-  color: #E01A76;
-}
-
-.btn-primary {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
-}
 .container {
     margin-left:5px;
-    margin-right: 5px;
+    margin-right: 5px; 
 }
 #dataContainer {
     padding-top: 60px;
     text-align: left;
     flex-basis: auto;
 }
-
+#barcodeForm {
+    padding-top: 5px;
+    margin: 5rem;
+}
 .data-table {
     margin-left: 5rem;
     /*width: 90%;*/

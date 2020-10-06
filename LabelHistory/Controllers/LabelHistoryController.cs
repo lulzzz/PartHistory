@@ -16,7 +16,7 @@ namespace LabelHistory.Controllers
         public async Task<IActionResult> GetDetailsAsync(
             [FromQuery] string barcode)
         {
-            if (barcode.Contains("~"))
+            if (barcode.Contains("~")) // the label scanned was a paint label
             {
                 Part part = new Part();
                 part = await GetPartDataFromPaintLabel(barcode);

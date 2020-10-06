@@ -1,26 +1,221 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
+import { RackData } from './RackData';
+import { PaintData } from './PaintData';
+import { MoldData } from './MoldData';
+import { FinesseData } from './FinesseData';
+import Collapse from 'react-bootstrap/Collapse'
+import Navbar from 'react-bootstrap/Navbar'
+import Nav from 'react-bootstrap/Nav'
+import Form from 'react-bootstrap/Form'
+import Button from 'react-bootstrap/Button'
+import Alert from 'react-bootstrap/Alert'
+import Col from 'react-bootstrap/Col'
+import Row from 'react-bootstrap/Row'
+import Image from 'react-bootstrap/Image'
+import { FcCollapse } from 'react-icons/fc'
+import { FcExpand } from 'react-icons/fc'
+import { BiBarcodeReader } from 'react-icons/bi'
+import { Container } from 'reactstrap';
+import Scrollspy from 'react-scrollspy'
+import { IconContext } from "react-icons";
+import MagnaLogo from './MagnaLogo.png';
 
 export class Home extends Component {
-  static displayName = Home.name;
+    constructor(props) {
+        super(props);
+        this.state = {
+            error: null,
+            isLoaded: false,
+            barcodeEntry: "",
+            part: [],
+            labelScanned: ""
+        };
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+    handleSubmit(event) {
+        event.preventDefault();
 
-  render () {
-    return (
-      <div>
-        <h1>Hello, world!</h1>
-        <p>Welcome to your new single-page application, built with:</p>
-        <ul>
-          <li><a href='https://get.asp.net/'>ASP.NET Core</a> and <a href='https://msdn.microsoft.com/en-us/library/67ef8sbd.aspx'>C#</a> for cross-platform server-side code</li>
-          <li><a href='https://facebook.github.io/react/'>React</a> for client-side code</li>
-          <li><a href='http://getbootstrap.com/'>Bootstrap</a> for layout and styling</li>
-        </ul>
-        <p>To help you get started, we have also set up:</p>
-        <ul>
-          <li><strong>Client-side navigation</strong>. For example, click <em>Counter</em> then <em>Back</em> to return here.</li>
-          <li><strong>Development server integration</strong>. In development mode, the development server from <code>create-react-app</code> runs in the background automatically, so your client-side resources are dynamically built on demand and the page refreshes when you modify any file.</li>
-          <li><strong>Efficient production builds</strong>. In production mode, development-time features are disabled, and your <code>dotnet publish</code> configuration produces minified, efficiently bundled JavaScript files.</li>
-        </ul>
-        <p>The <code>ClientApp</code> subdirectory is a standard React application based on the <code>create-react-app</code> template. If you open a command prompt in that directory, you can run <code>npm</code> commands such as <code>npm test</code> or <code>npm install</code>.</p>
-      </div>
-    );
-  }
+        this.loadDataFromServer();
+        this.setState({ labelScanned: this.state.barcodeEntry, barcodeEntry: "" });
+
+    }
+    handleChange(event) {
+        this.setState({ barcodeEntry: event.target.value });
+    }
+    loadDataFromServer() {
+        fetch('api/LabelHistory?barcode=' + this.state.barcodeEntry)
+            .then((response) => response.json())
+            .then(partData => {
+                this.setState({ part: partData, isLoaded: true });
+            });
+    }
+    render() {
+        const { error } = this.state;
+        const instructions =
+            <div id="instructions">                
+                <Form onSubmit={this.handleSubmit} className="m-5" >
+                    <Form.Row>
+                        <Col xs={6}>
+                            <div className="col-sm input-group">
+                                <input type="text" id="barcodeInput" autoFocus value={this.state.barcodeEntry} className="form-control" onChange={this.handleChange} size="75" placeholder="Scan a label.." />
+                                <div className="input-group-append">
+                                    <span className="input-group-text"><BiBarcodeReader size="24px" /></span>
+                                </div>
+                            </div>
+                        </Col>
+                    </Form.Row>
+                </Form>
+                <BiBarcodeReader size="400px" className="rotate30" />
+                <h1>Scan a paint or mold label to see part details and history.</h1>
+            </div>;
+        if (error) {
+            return <div>Error: {error.message}</div>;
+        }
+        else {
+            return (
+                <div>
+                    <header>
+                        <Navbar fixed="top" bg="dark" variant="dark">
+                            <Navbar.Brand href="/Home">
+                                <img
+                                    src={MagnaLogo}
+                                    width="160"
+                                    height="40"
+                                    className="d-inline-block align-top"
+                                    alt="Magna logo"
+                                />                                   
+                            </Navbar.Brand>
+                        </Navbar>
+                    </header>
+                    <Container fluid id="dataContainer">
+                        <Row>                           
+                            < NavColumn />
+                            <Col fluid="true" id="scrollableContent">                               
+                                {this.state.isLoaded ? <PartData {...this.state} /> : instructions}
+                            </Col>
+                        </Row>
+                    </Container>
+                </div>
+            );
+        }
+    }
 }
+
+
+export class PartData extends Component {
+    render() {
+        return (
+            <div id="rootEl">
+                <Alert variant="primary"> A {this.props.scannedLabelType} Label was scanned: {this.props.labelScanned} </Alert>
+                <PaintData {...this.props.part.paintData} />
+                <hr />
+                <MoldData {...this.props.part.moldData} />
+                <hr />
+                <RackData {...this.props.part.rackData} />
+                <hr />
+                <FinesseData {...this.props.part.finesseData} />
+                <hr />
+                <PartInfo id="PartInfo"{...this.props} />
+                <hr />
+            </div>
+        );
+    }
+}
+
+
+function NavColumn(props) {
+    return (
+        <Col id="NavColumn" >
+            <Scrollspy
+                className="scrollspy"
+                currentClassName="is-current"
+                items={['PaintData', 'PaintDetails', 'PaintHistory', 'MoldData', 'RackData', 'RackHistory', 'RackContents', 'FinesseData', 'FinesseHistory', 'Defects', 'PartInfo', 'PartImage']}
+                offset={-200}
+
+                onUpdate={
+                    (el) => {
+                        console.log(el)
+                    }
+                }
+            >
+
+                <h3><a href="#PaintData">Paint Data</a></h3>
+                <h4 className="subNav"><a href="#PaintDetails">Paint Details</a></h4>
+                <h4 className="subNav"><a href="#PaintHistory">Paint History</a></h4>
+                <h3><a href="#MoldData">Mold Data</a></h3>
+                <h3><a href="#RackData">Rack Data</a></h3>
+                <h4 className="subNav" ><a href="#RackHistory">Rack History</a></h4>
+                <h4 className="subNav" ><a href="#RackContents">Rack Contents</a></h4>
+                <h3><a href="#FinesseData">Finesse Data</a></h3>
+                <h4 className="subNav" ><a href="#FinesseHistory">Finesse History</a></h4>
+                <h4 className="subNav" ><a href="#Defects">Defects</a></h4>
+                <h3><a href="#PartInfo">Part Description</a></h3>
+                <h4 className="subNav"><a href="#PartImage">Part Image</a></h4>
+            </Scrollspy>
+        </Col>
+    );
+}
+
+function PartInfo(props) {
+    const [open, setOpen] = useState(false);
+    const imgSource = "http://decostarimages/parts/" + props.part.styleNumber + ".jpg";
+    const noData =
+        <p className="indent">No data was found for this part.</p>;
+    const subHead =
+        <span className="subHead">| {props.part.partMasterData.fullDescription}</span>;
+    return (
+        <section id="PartInfo">
+            <h1
+                onClick={() => setOpen(!open)}
+                aria-controls="collapsePartInfo"
+                aria-expanded={open}
+            >{open ? <FcExpand /> : <FcCollapse />} Part Description {props.part.partMasterData.fullDescription ? subHead : <span className="subHead">| no data</span>}
+            </h1>
+            <Collapse in={!open}>
+                <div id="collapsePartInfo">
+                    <table className="table table-hover table-sm data-table">
+                        <tbody>
+                            <tr><td>Paint Label:</td><th>{props.part.paintBarcode}</th></tr>
+                            <tr><td>Mold Label:</td><th>{props.part.moldBarcode}</th></tr>
+                            <tr><td>Customer Part Number:</td><th>{props.part.partMasterData.customerPartNumber}</th></tr>
+                            <tr><td>Master Part Description 1:</td><th>{props.part.partMasterData.partDescription1}</th></tr>
+                            <tr><td>Master Part Description 2:</td><th>{props.part.partMasterData.partDescription2}</th></tr>
+                            <tr><td>Master Part Group:</td><th>{props.part.partMasterData.partGroup}</th></tr>
+                            <tr><td>Master Part Status:</td><th>{props.part.partMasterData.partStatus}</th></tr>
+                            <tr><td>Master Part Type:</td><th>{props.part.partMasterData.partType}</th></tr>
+                            <tr><td>Master Part ProdLine:</td><th>{props.part.partMasterData.prodLine}</th></tr>
+                            <tr><td>Part Full Description:</td><th>{props.part.partMasterData.fullDescription}</th></tr>
+                            <tr><td>Option Description:</td><th>{props.part.partMasterData.optionDescription}</th></tr>
+                            <tr><td>Part Type Description:</td><th>{props.part.partMasterData.partTypeDescription}</th></tr>
+                            <tr><td>Part Position:</td><th>{props.part.partMasterData.position}</th></tr>
+                        </tbody>
+                    </table>
+                    <PartImage {...props} className="indent" />
+                </div>
+            </Collapse>
+        </section>
+    );
+}
+
+
+function PartImage(props) {
+    const [open, setOpen] = useState(false);
+    const imgSource = "http://decostarimages/parts/" + props.part.paintData.styleNumber + ".jpg";
+    return (
+        <section id="PartImage" className="indent">
+            <h1
+                onClick={() => setOpen(!open)}
+                aria-controls="collapsePartImage"
+                aria-expanded={open}
+            >{open ? <FcExpand /> : <FcCollapse />} Part Image
+            </h1>
+            <Collapse in={!open}>
+                <div id="collapsePartImage">
+                    <Image src={imgSource} width="400" height="245" />
+                </div>
+            </Collapse>
+        </section>
+    );
+}
+

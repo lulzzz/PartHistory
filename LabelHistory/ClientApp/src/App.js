@@ -1,18 +1,17 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router';
 import { Layout } from './components/Layout';
-import { Label } from './components/Label';
+import { Home } from './components/Home';
 import { RackData } from './components/RackData';
 import './custom.css'
 
 export default class App extends Component {
   static displayName = App.name;
-
   render () {
     return (
       <Layout>
-            <Route exact path='/' component={Label}/>
-            <Route path='/labelHistory' component={Label} />
+            <Route exact path='/' component={Home} />
+            <Route path='/Home' component={Home} />
             <Route path='/rackData' component={RackData} />
       </Layout>
     );

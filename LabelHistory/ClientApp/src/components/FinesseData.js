@@ -3,8 +3,6 @@ import Collapse from 'react-bootstrap/Collapse'
 import { FcCollapse } from 'react-icons/fc'
 import { FcExpand } from 'react-icons/fc'
 
-
-
 export function FinesseData(props) {
     const [open, setOpen] = useState(false);
     const noData =
@@ -12,8 +10,7 @@ export function FinesseData(props) {
     const subHead =
         <span className="subHead">| {props.finesseStatus}</span>;
     const details =
-        <div>
-            
+        <div>         
             <FinesseDetails {...props} />
             <hr />
             <Defects {...props} />
@@ -22,13 +19,12 @@ export function FinesseData(props) {
         <section id="FinesseData">
             <h1
                 onClick={() => setOpen(!open)}
-                aria-controls="example-collapse-text"
+                aria-controls="collapse-FinesseData"
                 aria-expanded={open}
-
             >{open ? <FcExpand /> : <FcCollapse />} Finesse {props.rejectID ? subHead : <span className="subHead">| no data</span>}
             </h1>
             <Collapse in={!open}>
-                <div id="example-collapse-text">
+                <div id="collapse-FinesseData">
                     {props.rejectID ? details : noData}
                 </div>
             </Collapse>
@@ -41,13 +37,12 @@ function FinesseDetails(props) {
         <section id="FinesseHistory">
             <h2
                 onClick={() => setOpen(!open)}
-                aria-controls="example-collapse-text"
+                aria-controls="collapse-FinesseHistory"
                 aria-expanded={open}
-
             >{open ? <FcExpand /> : <FcCollapse />} Finesse History 
             </h2>
             <Collapse in={!open}>
-                <div id="example-collapse-text">
+                <div id="collapse-FinesseHistory">
                     <table className="table table-hover table-sm data-table">
                         <tbody>
                             <tr><th>Action</th><th>Date/Time</th><th>Operator</th><th>Work Area</th><th>Station</th></tr>
@@ -73,27 +68,23 @@ function Defects(props) {
         <span className="subHead">| {props.defects[0].description}</span>;
     const defects = props.defects.map(defect => (
         <tr key={defect.defectID}><td>{defect.count}:</td><td>{defect.category}</td><td>{defect.description}</td><td>{defect.x}</td><td>{defect.y}</td></tr>
-
     ));
     return (
         <section id="Defects">
             <h2
                 onClick={() => setOpen(!open)}
-                aria-controls="example-collapse-text"
+                aria-controls="collapse-Defects"
                 aria-expanded={open}
                 variant="outline-secondary"
                 size="sm"
             > {open ? <FcExpand /> : <FcCollapse />}  Defects {props.defects[0] ? subHead : <span className="subHead">| no data</span>}
             </h2>
-
             <Collapse in={!open}>
-                <div id="example-collapse-text">
+                <div id="collapse-Defects">
                     <table className="table table-hover table-sm data-table">
                         <tbody>
-
                             <tr><th></th><th>Category</th><th>Description</th><th>X</th><th>Y</th></tr>
                             {defects}
-
                         </tbody>
                     </table>
                     <DefectCanvas {...props} />
